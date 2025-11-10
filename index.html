@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template Portfolio นักเรียน</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Kanit', sans-serif; margin:0; padding:0; background:#f5f5f5; }
+    header { background: linear-gradient(90deg, #0047AB, #e60000); color:white; text-align:center; padding:2rem 1rem; }
+    header h1 { margin:0; font-size:2rem; }
+    header p { margin:0.5rem 0; font-size:1.1rem; }
+    section { padding:2rem 1rem; max-width:1000px; margin:auto; }
+    h2 { color:#0047AB; margin-bottom:1rem; }
+
+    input, textarea { width:100%; padding:0.5rem; margin:0.5rem 0; border-radius:5px; border:1px solid #ccc; }
+    button { background:#e60000; color:white; border:none; padding:0.7rem 1.5rem; border-radius:5px; cursor:pointer; margin-top:1rem; }
+    .project { margin-bottom:1rem; background:white; padding:1rem; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); }
+    .project img { width:100%; border-radius:8px; margin-bottom:0.5rem; }
+    .project-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:1rem; }
+
+    @media(max-width:600px){
+        header h1{font-size:1.5rem;}
+        header p{font-size:1rem;}
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Template Portfolio นักเรียน</h1>
+    <p>แก้ไขข้อมูลด้านล่างแล้วดาวน์โหลด Portfolio ของคุณ</p>
+</header>
+
+<section>
+    <h2>ข้อมูลส่วนตัว</h2>
+    <input type="text" id="name" placeholder="ชื่อ-นามสกุล">
+    <textarea id="about" rows="3" placeholder="เกี่ยวกับฉัน"></textarea>
+
+    <h2>ผลงาน</h2>
+    <div id="projects" class="project-grid">
+        <div class="project">
+            <input type="text" placeholder="ชื่อผลงาน" class="project-title">
+            <textarea rows="2" placeholder="คำอธิบายผลงาน" class="project-desc"></textarea>
+            <input type="text" placeholder="ลิงก์รูปภาพ (URL)" class="project-img">
+        </div>
+    </div>
+    <button onclick="addProject()">เพิ่มผลงาน</button>
+
+    <h2>ติดต่อ</h2>
+    <input type="text" id="email" placeholder="Email">
+    <input type="text" id="phone" placeholder="โทรศัพท์">
+
+    <button onclick="exportPortfolio()">ดาวน์โหลด Portfolio ของฉัน</button>
+</section>
+
+<script>
+function addProject() {
+    const container = document.getElementById('projects');
+    const div = document.createElement('div');
+    div.className = 'project';
+    div.innerHTML = `
+        <input type="text" placeholder="ชื่อผลงาน" class="project-title">
+        <textarea rows="2" placeholder="คำอธิบายผลงาน" class="project-desc"></textarea>
+        <input type="text" placeholder="ลิงก์รูปภาพ (URL)" class="project-img">
+    `;
+    container.appendChild(div);
+}
+
+function exportPortfolio() {
+    const name = document.getElementById('name').value || 'ชื่อ-นามสกุล';
+    const about = document.getElementById('about').value || 'เกี่ยวกับฉัน';
+    const email = document.getElementById('email').value || 'example@student.com';
+    const phone = document.getElementById('phone').value || '012-345-6789';
+
+    const projects = Array.from(document.getElementsByClassName('project')).map(p=>{
+        const title = p.querySelector('.project-title').value || 'ชื่อผลงาน';
+        const desc = p.querySelector('.project-desc').value || 'คำอธิบายผลงาน';
+        const img = p.querySelector('.project-img').value || '';
+        return `
+        <div class="project" style="margin-bottom:1rem; padding:1rem; background:#fff; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1);">
+            ${img ? `<img src="${img}" alt="${title}">` : ''}
+            <h3 style="color:#0047AB;">${title}</h3>
+            <p>${desc}</p>
+        </div>
+        `;
+    }).join('');
+
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${name} Portfolio</title>
+        <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            body { font-family:'Kanit',sans-serif; margin:0; padding:0; background:#f5f5f5; }
+            header { background: linear-gradient(90deg, #0047AB, #e60000); color:white; text-align:center; padding:2rem 1rem; }
+            header h1 { margin:0; font-size:2rem; }
+            header p { margin:0.5rem 0; font-size:1.1rem; }
+            section { padding:2rem 1rem; max-width:1000px; margin:auto; }
+            h3 { color:#0047AB; }
+            .project img { width:100%; border-radius:8px; margin-bottom:0.5rem; }
+            .project { margin-bottom:1rem; background:white; padding:1rem; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>${name}</h1>
+            <p>${about}</p>
+        </header>
+        <section>
+            <h2>ผลงานของฉัน</h2>
+            ${projects}
+            <h2>ติดต่อฉัน</h2>
+            <p>Email: ${email}</p>
+            <p>โทร: ${phone}</p>
+        </section>
+    </body>
+    </html>
+    `;
+
+    const blob = new Blob([htmlContent], {type:'text/html'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${name}_Portfolio.html`;
+    link.click();
+}
+</script>
+
+</body>
+</html>
